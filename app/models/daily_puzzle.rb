@@ -1,12 +1,13 @@
 class DailyPuzzle < ApplicationRecord
   belongs_to :word
 
-  validates :date, presence: true, uniqueness: true
+  validates :date, presence: true, uniqueness: { scope: :phoneme_count }
+  validates :phoneme_count, presence: true
 
-  def self.for_today
+  def self.for_today(phoneme_count: Word::DEFAULT_PHONEME_COUNT)
     today = Date.current
-    find_or_create_by!(date: today) do |puzzle|
-      puzzle.word = Word.five_phonemes.order("RANDOM()").first!
+    find_or_create_by!(date: today, phoneme_count: phoneme_count) do |puzzle|
+      puzzle.word = Word.with_phoneme_count(phoneme_count).order("RANDOM()").first!
     end
   end
 

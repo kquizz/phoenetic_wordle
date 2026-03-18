@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_18_023202) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_18_025757) do
   create_table "daily_puzzles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date", null: false
+    t.integer "phoneme_count", default: 3, null: false
     t.datetime "updated_at", null: false
     t.integer "word_id", null: false
-    t.index ["date"], name: "index_daily_puzzles_on_date", unique: true
+    t.index ["date", "phoneme_count"], name: "index_daily_puzzles_on_date_and_phoneme_count", unique: true
     t.index ["word_id"], name: "index_daily_puzzles_on_word_id"
   end
 
@@ -25,6 +26,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_023202) do
     t.datetime "created_at", null: false
     t.integer "daily_puzzle_id"
     t.json "guesses", default: "[]", null: false
+    t.integer "phoneme_count", default: 3, null: false
     t.string "session_id", null: false
     t.integer "status", default: 0, null: false
     t.integer "target_word_id", null: false

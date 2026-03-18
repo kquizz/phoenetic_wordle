@@ -50,9 +50,10 @@ body {
   align-items: center;
   padding: 20px;
   width: 100%;
-  max-width: 500px;
+  max-width: 900px;
 }
 
+/* Home */
 .home {
   text-align: center;
   padding: 40px 0;
@@ -76,6 +77,44 @@ body {
   justify-content: center;
 }
 
+/* Phoneme selector */
+.phoneme-selector {
+  margin-bottom: 24px;
+}
+
+.phoneme-selector label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.phoneme-options {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+
+.phoneme-option {
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--color-empty);
+  border-radius: 4px;
+  background: white;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.phoneme-option-selected {
+  background: var(--color-text);
+  color: white;
+  border-color: var(--color-text);
+}
+
+/* Buttons */
 .btn {
   display: inline-block;
   padding: 12px 24px;
@@ -104,12 +143,41 @@ body {
   padding: 10px 20px;
 }
 
+/* Game */
 .game-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 16px;
   width: 100%;
+}
+
+.game-layout {
+  display: flex;
+  gap: 32px;
+  align-items: flex-start;
+  width: 100%;
+  justify-content: center;
+}
+
+.game-left {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.game-right {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 700px) {
+  .game-layout {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .board {
@@ -173,6 +241,7 @@ body {
   100% { transform: scaleY(1); }
 }
 
+/* Input */
 .input-row {
   display: flex;
   gap: 8px;
@@ -194,6 +263,7 @@ body {
   border-color: var(--color-text);
 }
 
+/* Error */
 .error-container {
   min-height: 28px;
 }
@@ -213,6 +283,7 @@ body {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* Game over */
 .game-over {
   text-align: center;
   padding: 16px 0;
@@ -235,49 +306,91 @@ body {
   font-style: italic;
 }
 
-/* Keyboard */
-.keyboard {
+/* IPA Phoneme Keyboard */
+.ipa-keyboard {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   width: 100%;
-  max-width: 500px;
+  max-width: 580px;
   margin-top: 12px;
 }
 
-.keyboard-row {
-  display: flex;
-  gap: 6px;
-  justify-content: center;
+.ipa-keyboard-section {
+  width: 100%;
 }
 
-.key {
-  min-width: 32px;
-  height: 52px;
-  padding: 0 6px;
+.ipa-keyboard-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #888;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  text-align: center;
+}
+
+.ipa-keyboard-row {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.ipa-key {
+  min-width: 38px;
+  height: 46px;
+  padding: 2px 4px;
   border: none;
   border-radius: 4px;
   background: #d3d6da;
-  font-size: 0.85rem;
-  font-weight: 700;
-  text-transform: uppercase;
   cursor: pointer;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  gap: 1px;
+  transition: background-color 0.2s;
 }
 
-.key:active {
+.ipa-key:active {
   background: #b0b3b8;
 }
 
-.key-wide {
-  min-width: 58px;
-  font-size: 0.75rem;
+.ipa-key-symbol {
+  font-family: "Noto Sans", "DejaVu Sans", "Lucida Grande", sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
 }
 
-.key-absent {
+.ipa-key-hint {
+  font-size: 0.55rem;
+  color: #666;
+  line-height: 1;
+}
+
+.ipa-key-correct {
+  background: var(--color-correct);
+  color: white;
+}
+.ipa-key-correct .ipa-key-hint {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ipa-key-present {
+  background: var(--color-present);
+  color: white;
+}
+.ipa-key-present .ipa-key-hint {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.ipa-key-absent {
   background: var(--color-absent);
   color: white;
+}
+.ipa-key-absent .ipa-key-hint {
+  color: rgba(255, 255, 255, 0.8);
 }

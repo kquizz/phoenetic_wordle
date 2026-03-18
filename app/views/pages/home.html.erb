@@ -3,8 +3,22 @@
   <p class="home-description">
     Guess the word. Feedback is based on <strong>phonemes</strong> (IPA), not letters.
   </p>
+
+  <div class="phoneme-selector">
+    <label for="phoneme-count">Phonemes:</label>
+    <div class="phoneme-options">
+      <% (2..8).each do |n| %>
+        <button class="phoneme-option <%= 'phoneme-option-selected' if n == Word::DEFAULT_PHONEME_COUNT %>"
+                data-count="<%= n %>"
+                onclick="document.querySelectorAll('.phoneme-option').forEach(b => b.classList.remove('phoneme-option-selected')); this.classList.add('phoneme-option-selected'); document.querySelectorAll('.play-link').forEach(a => { let url = new URL(a.href); url.searchParams.set('phonemes', <%= n %>); a.href = url.toString(); });">
+          <%= n %>
+        </button>
+      <% end %>
+    </div>
+  </div>
+
   <div class="home-actions">
-    <%= link_to "Daily Puzzle", daily_path, class: "btn btn-primary" %>
-    <%= link_to "Practice", practice_path, class: "btn btn-secondary" %>
+    <%= link_to "Daily Puzzle", daily_path(phonemes: Word::DEFAULT_PHONEME_COUNT), class: "btn btn-primary play-link" %>
+    <%= link_to "Practice", practice_path(phonemes: Word::DEFAULT_PHONEME_COUNT), class: "btn btn-secondary play-link" %>
   </div>
 </div>

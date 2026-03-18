@@ -11,8 +11,6 @@ count = 0
 batch = []
 
 CmuDictParser.parse_file(dict_path) do |attrs|
-  next unless attrs[:phoneme_count] == 5
-
   batch << attrs
   if batch.size >= 1000
     Word.insert_all(batch, unique_by: :text)
@@ -27,4 +25,7 @@ if batch.any?
   count += batch.size
 end
 
-puts "\nSeeded #{count} five-phoneme words (#{Word.five_phonemes.count} in database)"
+puts "\nSeeded #{count} words (#{Word.count} in database)"
+(2..8).each do |n|
+  puts "  #{n} phonemes: #{Word.where(phoneme_count: n).count} words"
+end

@@ -1,73 +1,78 @@
-<div class="game-container" data-controller="game" data-game-id-value="<%= @game.id %>" data-game-url-value="<%= game_guesses_path(@game) %>" data-game-over-value="<%= @game.over? %>" data-game-max-guesses-value="6" data-game-current-guess-value="<%= @game.current_guess_number %>">
+<% keyboard_states = phoneme_keyboard_states(@game) %>
+
+<div class="game-container" data-controller="game" data-game-over-value="<%= @game.over? %>">
 
   <div id="error" class="error-container">
   </div>
 
-  <div class="board">
-    <% 6.times do |i| %>
-      <% guess = (@game.guesses || [])[i] %>
-      <%= render "games/row", guess: guess, row_index: i %>
-    <% end %>
+  <div class="game-layout">
+    <div class="game-left">
+      <div class="board">
+        <% Game::MAX_GUESSES.times do |i| %>
+          <% guess = (@game.guesses || [])[i] %>
+          <%= render "games/row", guess: guess, row_index: i, phoneme_count: @game.phoneme_count %>
+        <% end %>
+      </div>
+
+      <% unless @game.over? %>
+        <div class="input-row" id="game-input">
+          <%= form_with url: game_guesses_path(@game), method: :post do |f| %>
+            <%= f.text_field :guess,
+                 maxlength: 20,
+                 autocomplete: "off",
+                 autocapitalize: "none",
+                 placeholder: "Type a word...",
+                 class: "guess-input",
+                 autofocus: true %>
+            <%= f.submit "Enter", class: "btn btn-submit" %>
+          <% end %>
+        </div>
+      <% end %>
+
+      <% if @game.over? %>
+        <div class="game-over">
+          <% if @game.won? %>
+            <p class="result-message result-win">You got it in <%= @game.current_guess_number %>!</p>
+          <% else %>
+            <p class="result-message result-loss">
+              The word was <strong><%= @game.target_word.text %></strong>
+              (<span class="ipa">/<%= @game.target_word.ipa %>/</span>)
+            </p>
+          <% end %>
+          <% if @game.daily_puzzle %>
+            <button data-controller="share"
+                    data-share-text-value="<%= share_text(@game) %>"
+                    data-action="click->share#copy"
+                    class="btn btn-primary">
+              Share Result
+            </button>
+          <% end %>
+          <% unless @game.daily_puzzle %>
+            <%= link_to "Play Again", practice_path(phonemes: @game.phoneme_count), class: "btn btn-primary" %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+
+    <div class="game-right">
+      <div class="ipa-keyboard" id="ipa-keyboard">
+        <% GamesHelper::IPA_KEYBOARD_LAYOUT.each do |section, phonemes| %>
+          <div class="ipa-keyboard-section">
+            <div class="ipa-keyboard-label"><%= section %></div>
+            <div class="ipa-keyboard-row">
+              <% phonemes.each do |phoneme| %>
+                <% state = keyboard_states[phoneme] %>
+                <button class="ipa-key <%= "ipa-key-#{state}" if state %>"
+                        title="<%= ArpabetToIpa.friendly(phoneme) %>"
+                        type="button">
+                  <span class="ipa-key-symbol"><%= phoneme %></span>
+                  <span class="ipa-key-hint"><%= ArpabetToIpa.friendly(phoneme).split("(").first.strip %></span>
+                </button>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
   </div>
-
-  <% unless @game.over? %>
-    <div class="input-row" id="game-input" data-game-target="inputRow">
-      <input type="text"
-             maxlength="20"
-             autocomplete="off"
-             autocapitalize="none"
-             data-game-target="input"
-             data-action="keydown.enter->game#submitGuess"
-             placeholder="Type a word..."
-             class="guess-input"
-             autofocus>
-      <button data-action="click->game#submitGuess" class="btn btn-submit">Enter</button>
-    </div>
-  <% end %>
-
-  <% unless @game.over? %>
-    <div class="keyboard" data-controller="keyboard">
-      <div class="keyboard-row">
-        <% %w[q w e r t y u i o p].each do |key| %>
-          <button class="key" data-key="<%= key %>" data-action="click->keyboard#press" type="button"><%= key %></button>
-        <% end %>
-      </div>
-      <div class="keyboard-row">
-        <% %w[a s d f g h j k l].each do |key| %>
-          <button class="key" data-key="<%= key %>" data-action="click->keyboard#press" type="button"><%= key %></button>
-        <% end %>
-      </div>
-      <div class="keyboard-row">
-        <button class="key key-wide" data-action="click->keyboard#enter" type="button">Enter</button>
-        <% %w[z x c v b n m].each do |key| %>
-          <button class="key" data-key="<%= key %>" data-action="click->keyboard#press" type="button"><%= key %></button>
-        <% end %>
-        <button class="key key-wide" data-action="click->keyboard#backspace" type="button">&#9003;</button>
-      </div>
-    </div>
-  <% end %>
-
-  <% if @game.over? %>
-    <div class="game-over">
-      <% if @game.won? %>
-        <p class="result-message result-win">You got it in <%= @game.current_guess_number %>!</p>
-      <% else %>
-        <p class="result-message result-loss">
-          The word was <strong><%= @game.target_word.text %></strong>
-          (<span class="ipa">/<%= @game.target_word.ipa %>/</span>)
-        </p>
-      <% end %>
-      <% if @game.daily_puzzle %>
-        <button data-controller="share"
-                data-share-text-value="<%= share_text(@game) %>"
-                data-action="click->share#copy"
-                class="btn btn-primary">
-          Share Result
-        </button>
-      <% end %>
-      <% unless @game.daily_puzzle %>
-        <%= link_to "Play Again", practice_path, class: "btn btn-primary" %>
-      <% end %>
-    </div>
-  <% end %>
 </div>

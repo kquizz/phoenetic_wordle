@@ -10,13 +10,13 @@ class GuessesController < ApplicationController
       return
     end
 
-    validation = GuessValidator.validate(@guess_text)
+    validation = GuessValidator.validate(@guess_text, expected_phoneme_count: @game.phoneme_count)
 
     unless validation.valid?
       message = case validation.error
                 when :blank then "Please enter a word"
                 when :not_in_dictionary then "Not in word list"
-                when :wrong_phoneme_count then "That word has #{validation.phoneme_count} sounds, you need 5"
+                when :wrong_phoneme_count then "\"#{@guess_text}\" is #{validation.phoneme_count} phonemes (/#{validation.phonemes.join}/), the word needs to be #{@game.phoneme_count}"
                 end
 
       respond_to do |format|

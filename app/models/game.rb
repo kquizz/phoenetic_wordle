@@ -6,10 +6,11 @@ class Game < ApplicationRecord
 
   enum :status, { in_progress: 0, won: 1, lost: 2 }
 
-  MAX_GUESSES = 6
+  MAX_GUESSES = 8
 
   validates :session_id, presence: true
   validates :status, presence: true
+  validates :phoneme_count, presence: true
 
   def add_guess!(word_text, phonemes, evaluation)
     guesses_array = guesses || []

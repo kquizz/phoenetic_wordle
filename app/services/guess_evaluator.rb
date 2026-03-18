@@ -1,6 +1,6 @@
 class GuessEvaluator
   def self.evaluate(guess:, target:)
-    result = Array.new(5, :absent)
+    result = Array.new(guess.length, :absent)
     target_remaining = target.dup
 
     # Pass 1: Mark exact matches (correct)
