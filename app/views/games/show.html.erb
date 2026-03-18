@@ -25,6 +25,28 @@
     </div>
   <% end %>
 
+  <% unless @game.over? %>
+    <div class="keyboard" data-controller="keyboard">
+      <div class="keyboard-row">
+        <% %w[q w e r t y u i o p].each do |key| %>
+          <button class="key" data-key="<%= key %>" data-action="click->keyboard#press" type="button"><%= key %></button>
+        <% end %>
+      </div>
+      <div class="keyboard-row">
+        <% %w[a s d f g h j k l].each do |key| %>
+          <button class="key" data-key="<%= key %>" data-action="click->keyboard#press" type="button"><%= key %></button>
+        <% end %>
+      </div>
+      <div class="keyboard-row">
+        <button class="key key-wide" data-action="click->keyboard#enter" type="button">Enter</button>
+        <% %w[z x c v b n m].each do |key| %>
+          <button class="key" data-key="<%= key %>" data-action="click->keyboard#press" type="button"><%= key %></button>
+        <% end %>
+        <button class="key key-wide" data-action="click->keyboard#backspace" type="button">&#9003;</button>
+      </div>
+    </div>
+  <% end %>
+
   <% if @game.over? %>
     <div class="game-over">
       <% if @game.won? %>
