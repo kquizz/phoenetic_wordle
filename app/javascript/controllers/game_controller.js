@@ -35,7 +35,7 @@ export default class extends Controller {
         headers: {
           "Content-Type": "application/x-www-form-urlencoded",
           "Accept": "text/vnd.turbo-stream.html",
-          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']").content
+          "X-CSRF-Token": document.querySelector("meta[name='csrf-token']")?.content || ""
         },
         body: new URLSearchParams({ guess: guess })
       })
