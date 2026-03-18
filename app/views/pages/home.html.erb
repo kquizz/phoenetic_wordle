@@ -1,1 +1,10 @@
-<h1>Phonetic Wordle</h1>
+<div class="home">
+  <p class="home-tagline">Wordle, but with sounds.</p>
+  <p class="home-description">
+    Guess the word. Feedback is based on <strong>phonemes</strong> (IPA), not letters.
+  </p>
+  <div class="home-actions">
+    <%= link_to "Daily Puzzle", daily_path, class: "btn btn-primary" %>
+    <%= link_to "Practice", practice_path, class: "btn btn-secondary" %>
+  </div>
+</div>

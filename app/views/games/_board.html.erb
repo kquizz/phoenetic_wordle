@@ -1,0 +1,6 @@
+<div class="board">
+  <% 6.times do |i| %>
+    <% guess = (@game.guesses || [])[i] %>
+    <%= render "games/row", guess: guess, row_index: i %>
+  <% end %>
+</div>

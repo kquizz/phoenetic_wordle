@@ -1,1 +1,51 @@
-<div>Game</div>
+<div class="game-container" data-controller="game" data-game-id-value="<%= @game.id %>" data-game-url-value="<%= game_guesses_path(@game) %>" data-game-over-value="<%= @game.over? %>" data-game-max-guesses-value="6" data-game-current-guess-value="<%= @game.current_guess_number %>">
+
+  <div id="error" class="error-container">
+  </div>
+
+  <div class="board">
+    <% 6.times do |i| %>
+      <% guess = (@game.guesses || [])[i] %>
+      <%= render "games/row", guess: guess, row_index: i %>
+    <% end %>
+  </div>
+
+  <% unless @game.over? %>
+    <div class="input-row" id="game-input" data-game-target="inputRow">
+      <input type="text"
+             maxlength="20"
+             autocomplete="off"
+             autocapitalize="none"
+             data-game-target="input"
+             data-action="keydown.enter->game#submitGuess"
+             placeholder="Type a word..."
+             class="guess-input"
+             autofocus>
+      <button data-action="click->game#submitGuess" class="btn btn-submit">Enter</button>
+    </div>
+  <% end %>
+
+  <% if @game.over? %>
+    <div class="game-over">
+      <% if @game.won? %>
+        <p class="result-message result-win">You got it in <%= @game.current_guess_number %>!</p>
+      <% else %>
+        <p class="result-message result-loss">
+          The word was <strong><%= @game.target_word.text %></strong>
+          (<span class="ipa">/<%= @game.target_word.ipa %>/</span>)
+        </p>
+      <% end %>
+      <% if @game.daily_puzzle %>
+        <button data-controller="share"
+                data-share-text-value="<%= share_text(@game) %>"
+                data-action="click->share#copy"
+                class="btn btn-primary">
+          Share Result
+        </button>
+      <% end %>
+      <% unless @game.daily_puzzle %>
+        <%= link_to "Play Again", practice_path, class: "btn btn-primary" %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

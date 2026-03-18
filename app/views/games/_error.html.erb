@@ -1,1 +1,5 @@
-<div id="error"><%= message if local_assigns[:message] %></div>
+<div id="error" class="error-container">
+  <% if local_assigns[:message] %>
+    <p class="error-message"><%= message %></p>
+  <% end %>
+</div>

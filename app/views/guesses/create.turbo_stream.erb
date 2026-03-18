@@ -1,1 +1,22 @@
-<%= turbo_stream.replace "error" do %><%= render "games/error" %><% end %>
+<%= turbo_stream.replace "row-#{@guess_index}" do %>
+  <%= render "games/row", guess: @guess_data, row_index: @guess_index %>
+<% end %>
+
+<%= turbo_stream.replace "error" do %>
+  <%= render "games/error" %>
+<% end %>
+
+<% if @game.over? %>
+  <%= turbo_stream.replace "game-input" do %>
+    <div class="game-over">
+      <% if @game.won? %>
+        <p class="result-message result-win">You got it in <%= @game.current_guess_number %>!</p>
+      <% else %>
+        <p class="result-message result-loss">
+          The word was <strong><%= @game.target_word.text %></strong>
+          (<span class="ipa">/<%= @game.target_word.ipa %>/</span>)
+        </p>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

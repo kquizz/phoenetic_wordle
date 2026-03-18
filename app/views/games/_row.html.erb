@@ -1,0 +1,15 @@
+<div class="row" id="row-<%= row_index %>">
+  <% if guess %>
+    <% guess["phonemes"].each_with_index do |phoneme, i| %>
+      <div class="cell cell-<%= guess["evaluation"][i] %>">
+        <span class="ipa"><%= phoneme %></span>
+      </div>
+    <% end %>
+  <% else %>
+    <% 5.times do %>
+      <div class="cell cell-empty">
+        <span class="cell-letter" data-game-target="cell"></span>
+      </div>
+    <% end %>
+  <% end %>
+</div>
