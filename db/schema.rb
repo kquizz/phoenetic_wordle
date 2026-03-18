@@ -10,7 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_18_022618) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_18_023202) do
+  create_table "daily_puzzles", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.date "date", null: false
+    t.datetime "updated_at", null: false
+    t.integer "word_id", null: false
+    t.index ["date"], name: "index_daily_puzzles_on_date", unique: true
+    t.index ["word_id"], name: "index_daily_puzzles_on_word_id"
+  end
+
+  create_table "games", force: :cascade do |t|
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.integer "daily_puzzle_id"
+    t.json "guesses", default: "[]", null: false
+    t.string "session_id", null: false
+    t.integer "status", default: 0, null: false
+    t.integer "target_word_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["daily_puzzle_id"], name: "index_games_on_daily_puzzle_id"
+    t.index ["session_id", "daily_puzzle_id"], name: "index_games_on_session_id_and_daily_puzzle_id", unique: true
+    t.index ["target_word_id"], name: "index_games_on_target_word_id"
+  end
+
   create_table "words", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.string "ipa", null: false
@@ -21,4 +44,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_022618) do
     t.index ["phoneme_count"], name: "index_words_on_phoneme_count"
     t.index ["text"], name: "index_words_on_text", unique: true
   end
+
+  add_foreign_key "daily_puzzles", "words"
+  add_foreign_key "games", "daily_puzzles"
+  add_foreign_key "games", "words", column: "target_word_id"
 end
