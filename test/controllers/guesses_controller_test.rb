@@ -26,4 +26,11 @@ class GuessesControllerTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_match(/5 phonemes/, response.body)
   end
+
+  test "question mark returns hint suggestions" do
+    game = Game.create!(session_id: "test", target_word: @target, phoneme_count: 3)
+    post game_guesses_path(game), params: { guess: "?" }, headers: { "Accept" => "text/vnd.turbo-stream.html" }
+    assert_response :success
+    assert_match(/Try:/, response.body)
+  end
 end
