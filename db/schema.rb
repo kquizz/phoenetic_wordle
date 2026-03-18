@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_18_025757) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_18_032257) do
   create_table "daily_puzzles", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.date "date", null: false
@@ -37,12 +37,14 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_18_025757) do
   end
 
   create_table "words", force: :cascade do |t|
+    t.boolean "common", default: false, null: false
     t.datetime "created_at", null: false
     t.string "ipa", null: false
     t.integer "phoneme_count", null: false
     t.json "phonemes", null: false
     t.string "text", null: false
     t.datetime "updated_at", null: false
+    t.index ["phoneme_count", "common"], name: "index_words_on_phoneme_count_and_common"
     t.index ["phoneme_count"], name: "index_words_on_phoneme_count"
     t.index ["text"], name: "index_words_on_text", unique: true
   end

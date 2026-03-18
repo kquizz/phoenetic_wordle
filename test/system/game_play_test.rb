@@ -2,8 +2,8 @@ require "application_system_test_case"
 
 class GamePlayTest < ApplicationSystemTestCase
   setup do
-    Word.create!(text: "cat", ipa: "kæt", phonemes: ["k", "æ", "t"], phoneme_count: 3)
-    Word.create!(text: "bat", ipa: "bæt", phonemes: ["b", "æ", "t"], phoneme_count: 3)
+    Word.create!(text: "cat", ipa: "kæt", phonemes: ["k", "æ", "t"], phoneme_count: 3, common: true)
+    Word.create!(text: "bat", ipa: "bæt", phonemes: ["b", "æ", "t"], phoneme_count: 3, common: true)
     DailyPuzzle.create!(date: Date.current, word: Word.find_by(text: "cat"), phoneme_count: 3)
   end
 

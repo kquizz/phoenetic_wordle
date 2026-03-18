@@ -2,9 +2,9 @@ require "test_helper"
 
 class GuessesControllerTest < ActionDispatch::IntegrationTest
   setup do
-    @target = Word.create!(text: "cat", ipa: "kæt", phonemes: ["k", "æ", "t"], phoneme_count: 3)
-    Word.create!(text: "bat", ipa: "bæt", phonemes: ["b", "æ", "t"], phoneme_count: 3)
-    Word.create!(text: "plant", ipa: "plænt", phonemes: ["p", "l", "æ", "n", "t"], phoneme_count: 5)
+    @target = Word.create!(text: "cat", ipa: "kæt", phonemes: ["k", "æ", "t"], phoneme_count: 3, common: true)
+    Word.create!(text: "bat", ipa: "bæt", phonemes: ["b", "æ", "t"], phoneme_count: 3, common: true)
+    Word.create!(text: "plant", ipa: "plænt", phonemes: ["p", "l", "æ", "n", "t"], phoneme_count: 5, common: true)
   end
 
   test "valid guess returns turbo stream" do

@@ -4,7 +4,7 @@ class HintGenerator
     return [] if game.over?
 
     constraints = build_constraints(game)
-    candidates = Word.with_phoneme_count(game.phoneme_count)
+    candidates = Word.with_phoneme_count(game.phoneme_count).common
 
     candidates.select { |word| matches_constraints?(word.phonemes, constraints) }
               .sample(limit)

@@ -26,6 +26,17 @@ if batch.any?
 end
 
 puts "\nSeeded #{count} words (#{Word.count} in database)"
+
+# Mark common words
+common_path = Rails.root.join("db", "cmu_dict", "common_words.txt")
+if File.exist?(common_path)
+  common_words = File.readlines(common_path).map(&:strip).map(&:downcase)
+  Word.where(text: common_words).update_all(common: true)
+  puts "Marked #{Word.where(common: true).count} common words"
+end
+
 (2..8).each do |n|
-  puts "  #{n} phonemes: #{Word.where(phoneme_count: n).count} words"
+  common = Word.where(phoneme_count: n, common: true).count
+  total = Word.where(phoneme_count: n).count
+  puts "  #{n} phonemes: #{total} words (#{common} common)"
 end

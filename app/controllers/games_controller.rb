@@ -13,7 +13,7 @@ class GamesController < ApplicationController
     @phoneme_count = validated_phoneme_count
     @game = Game.create!(
       session_id: current_session_id,
-      target_word: Word.with_phoneme_count(@phoneme_count).order("RANDOM()").first!,
+      target_word: Word.with_phoneme_count(@phoneme_count).common.order("RANDOM()").first!,
       phoneme_count: @phoneme_count
     )
     render :show
