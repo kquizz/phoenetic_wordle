@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  text: hello
+  ipa: "hɛloʊ"
+  phonemes: '["h", "ɛ", "l", "oʊ"]'
+  phoneme_count: 4
+
+two:
+  text: world
+  ipa: "wɝld"
+  phonemes: '["w", "ɝ", "l", "d"]'
+  phoneme_count: 4

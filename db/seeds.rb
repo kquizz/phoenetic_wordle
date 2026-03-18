@@ -1,9 +1,30 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+dict_path = Rails.root.join("db", "cmu_dict", "cmudict-0.7b.txt")
+
+unless File.exist?(dict_path)
+  puts "CMU dictionary not found at #{dict_path}"
+  puts "Download it: curl -L -o db/cmu_dict/cmudict-0.7b.txt https://raw.githubusercontent.com/cmusphinx/cmudict/master/cmudict.dict"
+  exit 1
+end
+
+puts "Parsing CMU dictionary..."
+count = 0
+batch = []
+
+CmuDictParser.parse_file(dict_path) do |attrs|
+  next unless attrs[:phoneme_count] == 5
+
+  batch << attrs
+  if batch.size >= 1000
+    Word.insert_all(batch, unique_by: :text)
+    count += batch.size
+    batch.clear
+    print "."
+  end
+end
+
+if batch.any?
+  Word.insert_all(batch, unique_by: :text)
+  count += batch.size
+end
+
+puts "\nSeeded #{count} five-phoneme words (#{Word.five_phonemes.count} in database)"
