@@ -55,17 +55,6 @@
   <% end %>
 <% else %>
   <%= turbo_stream.replace "game-input" do %>
-    <div class="input-row" id="game-input">
-      <%= form_with url: game_guesses_path(@game), method: :post do |f| %>
-        <%= f.text_field :guess,
-             maxlength: 20,
-             autocomplete: "off",
-             autocapitalize: "none",
-             placeholder: "Type a word...",
-             class: "guess-input",
-             autofocus: true %>
-        <%= f.submit "Enter", class: "btn btn-submit" %>
-      <% end %>
-    </div>
+    <%= render "games/input_form", game: @game %>
   <% end %>
 <% end %>

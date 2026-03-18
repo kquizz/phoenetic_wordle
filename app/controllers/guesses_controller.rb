@@ -15,7 +15,12 @@ class GuessesController < ApplicationController
       hints = HintGenerator.suggestions(@game)
       message = hints.any? ? "Try: #{hints.join(', ')}" : "No suggestions available"
       respond_to do |format|
-        format.turbo_stream { render turbo_stream: turbo_stream.replace("error", partial: "games/error", locals: { message: message, auto_dismiss: true }) }
+        format.turbo_stream {
+          render turbo_stream: [
+            turbo_stream.replace("error", partial: "games/error", locals: { message: message, auto_dismiss: true }),
+            turbo_stream.replace("game-input", partial: "games/input_form", locals: { game: @game })
+          ]
+        }
       end
       return
     end
