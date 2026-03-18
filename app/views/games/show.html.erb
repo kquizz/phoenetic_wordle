@@ -50,6 +50,7 @@
           <% unless @game.daily_puzzle %>
             <%= link_to "Play Again", practice_path(phonemes: @game.phoneme_count), class: "btn btn-primary" %>
           <% end %>
+          <%= link_to "Home", root_path, class: "btn btn-secondary" %>
         </div>
       <% end %>
     </div>
